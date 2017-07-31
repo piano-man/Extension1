@@ -8,7 +8,7 @@
  * @param {function(string)} callback - called when the URL of the current tab
  *   is found.
  */
-function getCurrentTabUrl(callback) {
+/*function getCurrentTabUrl(callback) {
   // Query filter to be passed to chrome.tabs.query - see
   // https://developer.chrome.com/extensions/tabs#method-query
   var queryInfo = {
@@ -47,13 +47,13 @@ function getCurrentTabUrl(callback) {
   // alert(url); // Shows "undefined", because chrome.tabs.query is async.
 }
 
-/**
- * @param {string} searchTerm - Search term for Google Image search.
+*
+ *  * @param {string} searchTerm - Search term for Google Image search.
  * @param {function(string,number,number)} callback - Called when an image has
  *   been found. The callback gets the URL, width and height of the image.
  * @param {function(string)} errorCallback - Called when the image is not found.
  *   The callback gets a string that describes the failure reason.
- */
+ 
 function getImageUrl(searchTerm, callback, errorCallback) {
   // Google image search - 100 searches per day.
   // https://developers.google.com/image-search/
@@ -115,4 +115,23 @@ document.addEventListener('DOMContentLoaded', function() {
       renderStatus('Cannot display image. ' + errorMessage);
     });
   });
-});
+});*/
+
+window.onload = function () {
+  document.getElementById('searchButton').onclick = searchText;
+};
+function searchText() {
+  console.log("inside function")
+  var search = document.getElementById('searchText').value;
+  console.log(search)
+  if (search) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      console.log(tabs[0].id)
+      chrome.tabs.executeScript(tabs[0].id, { file: "search.js" });
+        chrome.tabs.sendMessage(tabs[0].id, { method: 'search', searchText: search });
+
+    });
+  }
+}
+
+
